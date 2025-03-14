@@ -9,7 +9,8 @@ export async function GET({ url }) {
 export async function PATCH({ url, request }) {
   const id = url.searchParams.get("id");
   const payload = await request.json();
-  if (!(await updateConfig(id, payload))) {
+  const updatedConfig = await updateConfig(id, payload);
+  if (!updatedConfig) {
     return new Response(null, { status: 500 });
   }
 

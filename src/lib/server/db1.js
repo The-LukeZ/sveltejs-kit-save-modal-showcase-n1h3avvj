@@ -35,13 +35,15 @@ const configs = {
   },
 };
 
-export async function fetchConfig(id) {
-  return id in configs ? configs[id] : null;
+export async function fetchConfig(/** @type {string} */ id) {
+  return configs[`${id}`] || null;
 }
 
-export async function updateConfig(id, newConfig) {
+export async function updateConfig(/** @type {string} */ id, /** @type {any} */ newConfig) {
   if (id in configs) {
-    configs[id] = newConfig;
+    for (const [key, value] of Object.entries(newConfig)) {
+      configs[id][key] = value; // We only update, not replace
+    }
     return true;
   }
   return false;

@@ -1,9 +1,27 @@
 <script>
+  import { saveFunction } from "$lib/savings";
   import { gg } from "$lib/stores/config.svelte";
   import equal from "fast-deep-equal/es6";
 
-  /** @type {any} */
-  let oldConfig = undefined;
+  let oldConfig;
+
+  saveFunction.set(async () => {
+    const res = await fetch("/api/configs?id=123", {
+      method: "PATCH",
+      body: JSON.stringify(gg.config),
+    });
+
+    if (res.ok) {
+      oldConfig = undefined;
+      const data = await res.json();
+      console.log("Response Data:", data);
+      gg.config = data;
+      gg.unsavedChanges = false;
+    } else {
+      console.error(res);
+      gg.error = `Status: ${res.status} - ${res.statusText}`;
+    }
+  });
 
   $effect(() => {
     if (oldConfig == undefined) {

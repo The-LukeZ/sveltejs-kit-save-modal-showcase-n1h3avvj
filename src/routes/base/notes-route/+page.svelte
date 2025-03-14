@@ -1,6 +1,6 @@
 <script>
-  import { gg } from "$lib/stores/config.svelte";
   import { saveFunction } from "$lib/savings";
+  import { gg } from "$lib/stores/config.svelte";
 
   // Reactive variable for the new note input
   let newNote = $state("");
@@ -17,7 +17,6 @@
       console.log("Response Data:", data);
       gg.config = data;
       gg.unsavedChanges = false;
-      gg.error = data;
     } else {
       console.error(res);
       gg.error = `Status: ${res.status} - ${res.statusText}`;
@@ -64,7 +63,3 @@
     </button>
   </div>
 </div>
-
-{#if gg.error}
-  <code>{gg.error}</code>
-{/if}
